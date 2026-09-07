@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard</title>
+  <meta name="description" content="A simple phishing email analyzer built with Python and Flask.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="/">PhishGuard</a>
+      <span class="project-label">Python + Flask Project</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h1>Check an email for common phishing signs</h1>
+      <p>
+        Paste a suspicious email or message below. PhishGuard looks for common warning signs
+        such as urgent language, requests for passwords, payment scams, and suspicious links.
+      </p>
+    </section>
+
+    <section class="card analyzer-card">
+      <form method="POST">
+        <label for="email_text">Email or message</label>
+        <textarea
+          id="email_text"
+          name="email_text"
+          maxlength="5000"
+          placeholder="Paste the suspicious message here..."
+          required>{{ email_text }}</textarea>
+
+        <p class="helper-text">Do not paste real passwords, card numbers, or other sensitive information.</p>
+
+        <button type="submit">Analyze Email</button>
+      </form>
+    </section>
+
+    {% if result %}
+    <section class="results-section">
+      <div class="card result-card risk-{{ result.level_key }}">
+        <div class="result-heading">
+          <div>
+            <p class="small-label">Risk result</p>
+            <h2>{{ result.level }}</h2>
+          </div>
+          <div class="score">{{ result.score }}<span>/100</span></div>
+        </div>
+
+        <div class="score-bar" aria-label="Risk score {{ result.score }} out of 100">
+          <div class="score-fill" style="width: {{ result.score }}%"></div>
+        </div>
+
+        <p>{{ result.summary }}</p>
+      </div>
+
+      <div class="findings-heading">
+        <h2>What was detected</h2>
+        <p>These are the rules that affected the score.</p>
+      </div>
+
+      <div class="findings-list">
+        {% for finding in result.findings %}
+        <article class="card finding">
+          <div class="finding-top">
+            <h3>{{ finding.title }}</h3>
+            {% if finding.points > 0 %}<span class="points">+{{ finding.points }} points</span>{% endif %}
+          </div>
+          <p>{{ finding.detail }}</p>
+        </article>
+        {% endfor %}
+      </div>
+
+      <section class="card safety-card">
+        <h2>What should you do next?</h2>
+        <ul>
+          <li>Do not click unexpected links in the message.</li>
+          <li>Go to the company website by typing the address yourself.</li>
+          <li>Verify the sender using a trusted phone number or contact method.</li>
+          <li>Never send passwords or one-time security codes by email.</li>
+        </ul>
+      </section>
+    </section>
+    {% endif %}
+
+    <section class="about-section">
+      <h2>How PhishGuard works</h2>
+      <p>
+        This project uses a rule-based scoring system written in Python. It checks the text and links
+        in a message for common phishing patterns, adds points when a warning sign is found, and then
+        explains the result. It does not use artificial intelligence or machine learning.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>PhishGuard is an educational project. A low score does not guarantee that a message is safe.</p>
+    </div>
+  </footer>
+</body>
+</html>
