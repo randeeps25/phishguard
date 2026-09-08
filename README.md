@@ -2,8 +2,8 @@
 
 PhishGuard is a phishing email analyzer built with Python and Flask. Users can paste a suspicious email or message and receive a risk score based on common phishing warning signs.
 
-## Live Website 
-https://phishguard-1sog.onrender.com/
+## Live Demo 
+### [Try PhishGuard →](https://phishguard-1sog.onrender.com/)
 
 ## Features
 - Analyzes suspicious emails and messages
